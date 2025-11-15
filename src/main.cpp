@@ -3,16 +3,16 @@
 #include <vector>
 
 // Include all our classes
-#include "AudioTrack.h"
-#include "MP3Track.h"
-#include "WAVTrack.h"
-#include "Playlist.h"
+#include "../include/AudioTrack.h"
+#include "../include/MP3Track.h"
+#include "../include/WAVTrack.h"
+#include "../include/Playlist.h"
 // Phase 4 orchestrator
-#include "DJSession.h"
-#include "DJLibraryService.h"
-#include "DJControllerService.h"
-#include "MixingEngineService.h"
-#include "PointerWrapper.h"
+#include "../include/DJSession.h"
+#include "../include/DJLibraryService.h"
+#include "../include/DJControllerService.h"
+#include "../include/MixingEngineService.h"
+#include "../include/PointerWrapper.h"
 /**
  * DJ Track Session Manager - Test Program
  * 
