@@ -13,9 +13,9 @@
     },
     
     // Disable inline suggestions and completions from AI
-    "editor.inlineSuggest.enabled": false,
+    "editor.inlineSuggest.enabled": true,
     "editor.quickSuggestions": {
-        "other": false,
+        "other": true,
         "comments": false,
         "strings": false
     },
