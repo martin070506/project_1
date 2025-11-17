@@ -40,7 +40,9 @@
     "files.associations": {
         "*.h": "cpp",
         "*.cpp": "cpp",
-        "*.txt": "plaintext"
+        "*.txt": "plaintext",
+        "ostream": "cpp",
+        "iostream": "cpp"
     },
     
     // Editor settings for academic integrity

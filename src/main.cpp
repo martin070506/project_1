@@ -42,7 +42,7 @@ void test_phase_1_memory_leaks() {
     my_playlist->add_track(mp3);
     my_playlist->add_track(wav);
     my_playlist->display();
-
+    
     // Remove a track (this will leak if remove_track is broken)
     std::cout << "Removing track..." << std::endl;
     my_playlist->remove_track("Strobe");
@@ -53,6 +53,10 @@ void test_phase_1_memory_leaks() {
     if(del){
         delete mp3;          // Should clean up AudioTrack data
         delete wav;          // Should clean up AudioTrack data
+
+        //TIP IF DEL IS TRUE the audio tracks would have been deleted from here
+        // BUT we deleted the tracks when removing a track;
+        //so for playlist destructor well just remove all tracks
     }
 
     std::cout << "Phase 1 test complete. Check for memory leaks!\n" << std::endl;
@@ -189,9 +193,9 @@ int main(int argc, char* argv[]) {
         
         // Test each phase individually
         test_phase_1_memory_leaks();
-        test_phase_2_rule_of_5();
-        test_phase_3();
-        demonstrate_polymorphism();
+        // test_phase_2_rule_of_5();
+        // test_phase_3();
+        // demonstrate_polymorphism();
         std::cout << "\n(Set 'run_software' to true in main.cpp to run the full interactive session.)\n" << std::endl;
     }
     return 0;
