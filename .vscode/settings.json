@@ -33,7 +33,7 @@
     
     // C++ specific settings
     "C_Cpp.intelliSenseEngine": "default",
-    "C_Cpp.autocomplete": "disabled",
+    "C_Cpp.autocomplete": "default",
     "C_Cpp.errorSquiggles": "enabled",
     
     // File associations
@@ -47,10 +47,10 @@
     
     // Editor settings for academic integrity
     "editor.acceptSuggestionOnCommitCharacter": false,
-    "editor.acceptSuggestionOnEnter": "off",
-    "editor.tabCompletion": "off",
-    "editor.wordBasedSuggestions": "off",
-    "editor.suggest.showWords": false,
+    "editor.acceptSuggestionOnEnter": "on",
+    "editor.tabCompletion": "on",
+    "editor.wordBasedSuggestions": "allDocuments",
+    "editor.suggest.showWords": true,
     
     // Disable telemetry and online features
     "telemetry.telemetryLevel": "off",
