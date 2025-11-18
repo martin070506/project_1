@@ -46,14 +46,64 @@ AudioTrack::AudioTrack(const AudioTrack& other)
     std::cout << "AudioTrack copy constructor called for: " << other.title << std::endl;
     #endif
     // Your code here...
-}
 
+    //We Couldve written this in the initializer list ABOVE
+    
+    this->title=other.title;
+    this->duration_seconds=other.duration_seconds;
+    this->bpm=other.bpm;
+    this->artists=other.artists;
+    if(other.waveform_size>0)
+    {
+        this->waveform_size=other.waveform_size;
+        this->waveform_data=new double[this->waveform_size];
+        for(size_t i=0;i<waveform_size;i++)
+        {
+            this->waveform_data[i]=other.waveform_data[i];
+        }
+        //so we need to copy all variable and go through the array, create a new one and copy each variable from that array
+    }
+    else 
+    {
+        this->waveform_size=0;
+        this->waveform_data=nullptr;
+    }
+    
+}
 AudioTrack& AudioTrack::operator=(const AudioTrack& other) {
     // TODO: Implement the copy assignment operator
     #ifdef DEBUG
     std::cout << "AudioTrack copy assignment called for: " << other.title << std::endl;
     #endif
     // Your code here...
+
+    //SELF CHECK--- SO WE DONT DELETE OURSELVES THAN COPY FROM IT
+    if(this==&other)
+    {
+        return *this;   
+    }
+
+    delete[] waveform_data;
+
+    this->title=other.title;
+    this->duration_seconds=other.duration_seconds;
+    this->bpm=other.bpm;
+    this->artists=other.artists;
+    if(other.waveform_size>0)
+    {
+        this->waveform_size=other.waveform_size;
+        this->waveform_data=new double[this->waveform_size];
+        for(size_t i=0;i<waveform_size;i++)
+        {
+            this->waveform_data[i]=other.waveform_data[i];
+        }
+        //so we need to copy all variables and go through the array, create a new one and copy each variable from that array
+    }
+    else 
+    {
+        this->waveform_size=0;
+        this->waveform_data=nullptr;
+    }
     return *this;
 }
 
