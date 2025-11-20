@@ -15,6 +15,7 @@ WAVTrack::WAVTrack(const std::string& title, const std::vector<std::string>& art
 void WAVTrack::load() {
     // TODO: Implement realistic WAV loading simulation
     // NOTE: Use exactly 2 spaces before the arrow (→) character
+    std::cout<< "Loading WAV: <"<<this->title<<"> at <" <<this->sample_rate<<"> Hz/"<<this->bit_depth<<"bit (uncompressed)..."<<std::endl;
 
 }
 
