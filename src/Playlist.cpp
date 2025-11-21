@@ -57,7 +57,6 @@ void Playlist::remove_track(const std::string& title) {
         } else {
             head = current->next;
         }
-        delete(current->track);
         delete current;
         current=nullptr;
         

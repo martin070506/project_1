@@ -9,14 +9,14 @@ MP3Track::MP3Track(const std::string& title, const std::vector<std::string>& art
     has_id3_tags(has_tags) 
 {
 
-    std::cout << "MP3Track created: " << bitrate << " kbps" << std::endl;
+    std::cout << "MP3Track created: " << this->bitrate << " kbps" << std::endl;
 }
 
 // ========== TODO: STUDENTS IMPLEMENT THESE VIRTUAL FUNCTIONS ==========
 
 void MP3Track::load() {
-    std::cout << "[MP3Track::load] Loading MP3: \"" << title
-              << "\" at " << bitrate << " kbps...\n";
+    std::cout << "[MP3Track::load] Loading MP3: \"" << this->title
+              << "\" at " << this->bitrate << " kbps...\n";
 
     // TODO: Implement MP3 loading with format-specific operations
     // NOTE: Use exactly 2 spaces before the arrow (→) character
@@ -31,13 +31,13 @@ void MP3Track::load() {
 }
 
 void MP3Track::analyze_beatgrid() {
-     std::cout << "[MP3Track::analyze_beatgrid] Analyzing beat grid for: \"" << title << "\"\n";
+     std::cout << "[MP3Track::analyze_beatgrid] Analyzing beat grid for: \"" << this->title << "\"\n";
     // TODO: Implement MP3-specific beat detection analysis
     // NOTE: Use exactly 2 spaces before each arrow (→) character
 
-    std::cout << "[MP3Track::analyze_beatgrid] Analyzing beat grid for: " << title << "\n";
-    double beats_estimated = (duration_seconds / 60.0) * bpm;
-    double precision_factor = bitrate / 320.0;
+    std::cout << "[MP3Track::analyze_beatgrid] Analyzing beat grid for: " << this->title << "\n";
+    double beats_estimated = (this->duration_seconds / 60.0) * bpm;
+    double precision_factor = this->bitrate / 320.0;
     std::cout << "  → Estimated beats: " << beats_estimated << "  → Compression precision factor: " 
         << precision_factor<< "\n";
 }
@@ -46,10 +46,10 @@ double MP3Track::get_quality_score() const {
     // TODO: Implement comprehensive quality scoring
     // NOTE: This method does NOT print anything
 
-    double score = (bitrate / 320.0) * 100.0;
-    if (has_id3_tags)
+    double score = (this->bitrate / 320.0) * 100.0;
+    if (this->has_id3_tags)
         score += 5;
-    if (bitrate < 128)
+    if (this->bitrate < 128)
         score -= 10;
 
     if (score > 100)
@@ -62,5 +62,20 @@ double MP3Track::get_quality_score() const {
 
 PointerWrapper<AudioTrack> MP3Track::clone() const {
     // TODO: Implement polymorphic cloning
-    return PointerWrapper<AudioTrack>(nullptr); // Replace with your implementation
+    MP3Track* mp3 = new MP3Track(
+        this->title, 
+        this->artists, 
+        this->duration_seconds, 
+        this->bpm, 
+        this->bitrate, 
+        this->has_id3_tags
+    );
+    
+    mp3->waveform_size = this->waveform_size;
+
+    mp3->waveform_data = new double[this->waveform_size];
+    for (size_t i = 0; i < this->waveform_size; i++)
+        mp3->waveform_data[i] = this->waveform_data[i];
+
+    return PointerWrapper<AudioTrack>(mp3); // Replace with your implementation
 }
