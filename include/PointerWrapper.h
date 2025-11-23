@@ -37,7 +37,10 @@ public:
      * Think about ownership and resource management.
      * Is the default destructor sufficient here?
      */
-    ~PointerWrapper() =default;
+    ~PointerWrapper() 
+    {
+        delete this->ptr;
+    }
 
     // ========== COPY OPERATIONS (DELETED) ==========
 
@@ -60,15 +63,26 @@ public:
      * HINT: How should ownership transfer from one wrapper to another?
      * What should happen to the source wrapper after the move?
      */
-    PointerWrapper(PointerWrapper&& other) noexcept {}
-
+    PointerWrapper(PointerWrapper&& other) noexcept:ptr(other.ptr){
+        other.ptr=nullptr;
+       
+    }
+    
     /**
      * TODO: Implement move assignment operator
      * HINT: Handle cleanup of current resource and ownership transfer
      * Don't forget about self-assignment!
      */
     PointerWrapper& operator=(PointerWrapper&& other) noexcept {
+        if(this!=&other)
+        {
+            delete this->ptr;
+            this->ptr = other.ptr;
+            other.ptr = nullptr;
+        }
         return *this;
+        
+        
     }
 
     // ========== ACCESS OPERATIONS ==========
@@ -80,6 +94,9 @@ public:
      */
 
     T& operator*() const {
+        if (ptr == nullptr) 
+            throw std::runtime_error("Attempted to dereference a null PointerWrapper.");
+        
         return *ptr;
     };
 
@@ -89,7 +106,10 @@ public:
      * What safety checks should you perform?
      */
     T* operator->() const {
-        return nullptr;
+        if (ptr == nullptr) 
+            throw std::runtime_error("Attempted to access a null PointerWrapper.");
+        
+        return ptr;
     }
 
     /**
@@ -99,7 +119,10 @@ public:
      * @throws std::runtime_error if ptr is null
      */
     T* get() const {
-        return nullptr; // Placeholder
+        if (ptr == nullptr) 
+            throw std::runtime_error("Attempted to get a null PointerWrapper.");
+
+        return ptr; // Placeholder
     }
 
     // ========== OWNERSHIP MANAGEMENT ==========
@@ -110,7 +133,10 @@ public:
      * Should the wrapper still own the pointer after calling release()?
      */
     T* release() {
-        return nullptr;
+        T* released_ptr = this->ptr;
+        this->ptr = nullptr;
+        
+        return released_ptr;
     }
 
     /**
@@ -119,6 +145,10 @@ public:
      * What should happen to the old pointer?
      */
     void reset(T* new_ptr = nullptr) {
+        if (this->ptr != new_ptr)
+            delete this->ptr;
+        
+        this->ptr = new_ptr;
     }
 
     // ========== UTILITY FUNCTIONS ==========
@@ -129,7 +159,7 @@ public:
      * Why might the explicit keyword be important here?
      */
     explicit operator bool() const {
-        return false; //placeholder
+        return ptr != nullptr; //placeholder
     }
 
     /**
@@ -163,6 +193,9 @@ void swap(PointerWrapper<T>& lhs, PointerWrapper<T>& rhs) noexcept {
     // TODO: Implement global swap function
     // HINT: You can use the member swap function
     //your code here...
+
+    using std::swap;
+    swap(lhs.ptr, rhs.ptr);
 }
 
 #endif // POINTERWRAPPER_H
