@@ -151,6 +151,6 @@ void AudioTrack::get_waveform_copy(double* buffer, size_t buffer_size) const {
 
 void AudioTrack::set_bpm(int bpm)
 {
-    if(bpm<0) //TODO THROW EXEPTION
+    if (bpm < 0); //TODO THROW EXEPTION
     this->bpm = bpm;
 }
