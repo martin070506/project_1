@@ -11,7 +11,32 @@ DJControllerService::DJControllerService(size_t cache_size)
  */
 int DJControllerService::loadTrackToCache(AudioTrack& track) {
     // Your implementation here 
-    return 0; // Placeholder
+    std::string key = track.get_title();
+
+    if (cache.contains(key)){
+        cache.get(key);
+        return 1; 
+    }
+
+    PointerWrapper<AudioTrack> trackCloneWrapper = track.clone();
+
+    if (!trackCloneWrapper) {
+        std::cerr << "[ERROR] Track: \"" << key << "\" failed to clone" << std::endl;
+        return 0; 
+    }
+
+    AudioTrack* rawTrack = trackCloneWrapper.release();;
+
+    rawTrack->load();
+    rawTrack->analyze_beatgrid();
+
+    PointerWrapper<AudioTrack> rawTrackClone = PointerWrapper<AudioTrack>(rawTrack);
+    //rawTrackClone's pointer points to same Address as rawTrack and trackCloneWrapper
+    
+    if (cache.put(std::move(rawTrackClone))) 
+        return -1;
+    else     
+        return 0;
 }
 
 void DJControllerService::set_cache_size(size_t new_size) {
@@ -28,6 +53,8 @@ void DJControllerService::displayCacheStatus() const {
  * TODO: Implement getTrackFromCache method
  */
 AudioTrack* DJControllerService::getTrackFromCache(const std::string& track_title) {
-    // Your implementation here
-    return nullptr; // Placeholder
+   //DOES NOT TRANSFER OWNERSHIP
+   std::cout << "\nGET TRACK FROM CACHE WAS CALLED----- THIS DOES NOT TRANSFER OWNERSHIP\n";
+   AudioTrack* AT_ptr = cache.get(track_title);
+   return AT_ptr;
 }

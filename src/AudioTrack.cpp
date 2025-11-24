@@ -148,3 +148,9 @@ void AudioTrack::get_waveform_copy(double* buffer, size_t buffer_size) const {
         std::memcpy(buffer, waveform_data, buffer_size * sizeof(double));
     }
 }
+
+void AudioTrack::set_bpm(int bpm)
+{
+    if(bpm<0) //TODO THROW EXEPTION
+    this->bpm = bpm;
+}
