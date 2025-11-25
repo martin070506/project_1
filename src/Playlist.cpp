@@ -14,11 +14,8 @@ Playlist::~Playlist() {
     #endif
 
     while (head)
-    {
         this->remove_track(head->track->get_title());
-        head=nullptr;
-    }
-   
+    
 }
 
 void Playlist::add_track(AudioTrack* track) {
@@ -47,21 +44,20 @@ void Playlist::remove_track(const std::string& title) {
     while (current && current->track->get_title() != title) {
         prev = current;
         current = current->next;
-        
     }
+
 
     if (current) {
         // Remove from linked list
-        if (prev) {
+        if (prev) 
             prev->next = current->next;
-        } else {
+        else 
             head = current->next;
-        }
+        
+        delete current->track;
         delete current;
+        
         current=nullptr;
-        
-        
-        
 
         track_count--;
         std::cout << "Removed '" << title << "' from playlist" << std::endl;

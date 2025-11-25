@@ -16,6 +16,26 @@ DJLibraryService::DJLibraryService(const Playlist& playlist)
 void DJLibraryService::buildLibrary(const std::vector<SessionConfig::TrackInfo>& library_tracks) {
     //Todo: Implement buildLibrary method
     std::cout << "TODO: Implement DJLibraryService::buildLibrary method\n"<< library_tracks.size() << " tracks to be loaded into library.\n";
+    int count =0;
+    for (SessionConfig::TrackInfo TI : library_tracks)
+    {
+        if(TI.type=="MP3")
+        {
+            AudioTrack * AT = new MP3Track(TI.title,TI.artists,TI.duration_seconds,TI.bpm,TI.extra_param1,TI.extra_param2);
+            this->library.push_back(AT);
+            std::cout<<"MP3Track created: "<<TI.extra_param1<<" kbps"<<std::endl;
+            count++;
+        }
+        if(TI.type=="WAV")
+        {
+            AudioTrack * AT = new WAVTrack(TI.title,TI.artists,TI.duration_seconds,TI.bpm,TI.extra_param1,TI.extra_param2);
+            this->library.push_back(AT);
+            std::cout<<"WAVTrack created: "<<TI.extra_param1<<"Hz/"<<TI.extra_param2 <<"bit"<<std::endl;
+            count++;
+        }
+         std::cout<<"[INFO] Track library built: "<<count<<" tracks loaded"<<std::endl;
+    }
+    
 }
 
 /**
@@ -54,12 +74,36 @@ Playlist& DJLibraryService::getPlaylist() {
  */
 AudioTrack* DJLibraryService::findTrack(const std::string& track_title) {
     // Your implementation here
-    return nullptr; // Placeholder
+    std::cout << "\nFIND TRACK FROM DJLibraryService----- THIS DOES NOT TRANSFER OWNERSHIP\n";
+    return playlist.find_track(track_title);
+    
 }
 
 void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name, 
                                                const std::vector<int>& track_indices) {
     // Your implementation here
+    std::cout << "\n[INFO] Loading playlist: " << playlist_name << std::endl;
+    Playlist* tempPlaylist = new Playlist(playlist_name);
+
+    for (int index : track_indices){
+        if (index < 0 || library.size() < index){
+            std::cout << "\n[WARNING] Invalid track index: " << index << std::endl;
+            continue;
+        }
+
+        AudioTrack* cloneTrack = library[index-1]->clone().release();
+        if (!cloneTrack){
+            std::cout << "\n[ERROR] AudioTrack is nullptr, index = " << index << std::endl;
+            continue;
+        }
+
+        cloneTrack->load();
+        cloneTrack->analyze_beatgrid();
+
+        playlist.add_track(cloneTrack);
+        std::cout << "\nAdded " << cloneTrack->get_title() << "to playlist " << playlist_name << std::endl;
+    }
+    
     // For now, add a placeholder to fix the linker error
     (void)playlist_name;  // Suppress unused parameter warning
     (void)track_indices;  // Suppress unused parameter warning
