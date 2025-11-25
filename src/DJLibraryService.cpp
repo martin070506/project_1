@@ -105,14 +105,24 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
     }
     
     // For now, add a placeholder to fix the linker error
-    (void)playlist_name;  // Suppress unused parameter warning
-    (void)track_indices;  // Suppress unused parameter warning
+    // (void)playlist_name;  // Suppress unused parameter warning
+    // (void)track_indices;  // Suppress unused parameter warning
 }
 /**
  * TODO: Implement getTrackTitles method
  * @return Vector of track titles in the playlist
  */
 std::vector<std::string> DJLibraryService::getTrackTitles() const {
-    // Your implementation here
-    return std::vector<std::string>(); // Placeholder
+    std::vector<std::string> Titles;
+    for(AudioTrack* t :playlist.getTracks())
+    {
+        Titles.push_back(t->get_title());
+    }
+    return Titles;
+}
+//IMPLEMEBTED DESTRUCTOR AS ASKED THAT WILL DELETE ALL TRACKS IN LIBRARY
+DJLibraryService::~DJLibraryService()
+{
+    for (AudioTrack* AT : library)
+        delete AT;
 }

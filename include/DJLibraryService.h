@@ -48,6 +48,7 @@ public:
      * @return A vector of strings containing the track titles.
      */
     std::vector<std::string> getTrackTitles() const;
+    ~DJLibraryService();
 
 private:
     Playlist playlist;
