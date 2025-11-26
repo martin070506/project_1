@@ -83,8 +83,7 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
                                                const std::vector<int>& track_indices) {
     // Your implementation here
     std::cout << "\n[INFO] Loading playlist: " << playlist_name << std::endl;
-    Playlist* tempPlaylist = new Playlist(playlist_name);
-
+    
     for (int index : track_indices){
         if (index < 0 || library.size() < index){
             std::cout << "\n[WARNING] Invalid track index: " << index << std::endl;

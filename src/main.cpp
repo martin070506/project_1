@@ -24,11 +24,9 @@
  * Students must fix the issues to make this program run cleanly.
  */
 
-bool del = true; // hint: what is the purpose of this variable? how it changes the ownership semantics?
+bool del = false; // hint: what is the purpose of this variable? how it changes the ownership semantics?
 
-// we'll delete original tracks in library/main(here), but we will delete cloned tracks from playlist, so that playlist is not responsible for a track,
-// but can delete tracks that were give to him, for example here the tracks were given out of scope from playlist, maybe when i delete playlist i dont necessirally
-//want tracks to get deleted, thats why we pass clones, and delete the clones.
+
 void test_phase_1_memory_leaks() {
     
     std::cout << "\n======== PHASE 1: MEMORY LEAK TESTING ========" << std::endl;
@@ -38,13 +36,14 @@ void test_phase_1_memory_leaks() {
     std::cout << "Creating tracks..." << std::endl;
     AudioTrack* mp3 = new MP3Track("Sunset Lover", {"Petit Biscuit"}, 180, 120, 320);
     AudioTrack* wav = new WAVTrack("Strobe", {"Deadmau5"}, 645, 128, 44100, 16);
+    
 
     // Create playlist and add tracks (this will leak nodes if destructor is broken)
     std::cout << "Creating playlist..." << std::endl;
     Playlist* my_playlist = new Playlist("Chill House Mix");
 
-    my_playlist->add_track(mp3->clone().release());  //We changed the MAIN input here, so that playlist is responsible for deletion of copytracks
-    my_playlist->add_track(wav->clone().release());  //We changed the MAIN input here, so that playlist is responsible for deletion of copytracks
+    my_playlist->add_track(mp3);  //We changed the MAIN input here, so that playlist is responsible for deletion of copytracks
+    my_playlist->add_track(wav);  //We changed the MAIN input here, so that playlist is responsible for deletion of copytracks
     my_playlist->display();
     
     // Remove a track (this will leak if remove_track is broken)

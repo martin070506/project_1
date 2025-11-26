@@ -29,7 +29,7 @@ class DJSession {
 private:
     // Session identification
     std::string session_name;
-
+    
     // Service-oriented architecture: delegate to services
     DJLibraryService library_service;
     DJControllerService controller_service;
@@ -51,6 +51,7 @@ private:
         size_t transitions = 0;
         size_t errors = 0;
     } stats;
+    void resetStats();
 
 public:
     // ========== CONSTRUCTORS & DESTRUCTOR ==========

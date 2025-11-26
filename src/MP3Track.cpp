@@ -35,8 +35,7 @@ void MP3Track::analyze_beatgrid() {
     // TODO: Implement MP3-specific beat detection analysis
     // NOTE: Use exactly 2 spaces before each arrow (→) character
 
-    std::cout << "[MP3Track::analyze_beatgrid] Analyzing beat grid for: " << this->title << "\n";
-    double beats_estimated = (this->duration_seconds / 60.0) * bpm;
+    int beats_estimated = (this->duration_seconds / 60.0) * bpm;
     double precision_factor = this->bitrate / 320.0;
     std::cout << "  → Estimated beats: " << beats_estimated << "  → Compression precision factor: " 
         << precision_factor<< "\n";
@@ -45,7 +44,7 @@ void MP3Track::analyze_beatgrid() {
 double MP3Track::get_quality_score() const {
     // TODO: Implement comprehensive quality scoring
     // NOTE: This method does NOT print anything
-
+;
     double score = (this->bitrate / 320.0) * 100.0;
     if (this->has_id3_tags)
         score += 5;
@@ -56,13 +55,13 @@ double MP3Track::get_quality_score() const {
         score = 100;
     if (score < 0)
         score = 0;
-
+    std::cout << "[MP3Track::get_quality_score] \"" << this->title << "\" score = "<<score<<"/100"<<std::endl;
     return score; // Replace with your implementation
 }
 
 PointerWrapper<AudioTrack> MP3Track::clone() const {
     // TODO: Implement polymorphic cloning
-    MP3Track* copy =new MP3Track(this->title,this->artists,this->duration_seconds,this->bpm,this->bitrate,this->has_id3_tags);
+    MP3Track *copy = new MP3Track(*this);
     copy->waveform_size=this->waveform_size;
     for(size_t i=0 ; i<this->waveform_size ; i++)
     { 
