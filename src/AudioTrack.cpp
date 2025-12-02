@@ -2,17 +2,21 @@
 #include <iostream>
 #include <cstring>
 #include <random>
+#include <stdexcept>
 
-AudioTrack::AudioTrack(const std::string& title, const std::vector<std::string>& artists, int duration, int bpm, size_t waveform_samples):
-    title(title), 
-    artists(artists),
-    duration_seconds(duration), 
-    bpm(bpm), 
-    waveform_size(waveform_samples) 
+AudioTrack::AudioTrack(const std::string& title,
+                       const std::vector<std::string>& artists,
+                       int duration,
+                       int bpm,
+                       size_t waveform_samples)
+    : title(title),
+      artists(artists),
+      duration_seconds(duration),
+      bpm(bpm),                     // 4th (matches class)
+      waveform_size(waveform_samples),
+      waveform_data(new double[waveform_size])
 {
-
     // Allocate memory for waveform analysis
-    waveform_data = new double[waveform_size];
 
     // Generate some dummy waveform data for testing
     std::random_device rd;
@@ -22,7 +26,7 @@ AudioTrack::AudioTrack(const std::string& title, const std::vector<std::string>&
     for (size_t i = 0; i < waveform_size; ++i) {
         waveform_data[i] = dis(gen);
     }
-   
+
     std::cout << "AudioTrack created: " << title << " by " << std::endl;
     for (const auto& artist : artists) {
         std::cout << artist << " ";
@@ -39,29 +43,24 @@ AudioTrack::~AudioTrack() {
     waveform_data=nullptr;
 }
 
-AudioTrack::AudioTrack(const AudioTrack& other):title(other.title),duration_seconds(other.duration_seconds),bpm(other.bpm),artists(other.artists)
+AudioTrack::AudioTrack(const AudioTrack& other)
+    : title(other.title),
+      artists(other.artists),
+      duration_seconds(other.duration_seconds),
+      bpm(other.bpm),
+      waveform_size(other.waveform_size),
+      waveform_data(other.waveform_size > 0
+                    ? new double[other.waveform_size]
+                    : nullptr)
 {
-    // TODO: Implement the copy constructor
-
     std::cout << "AudioTrack copy constructor called for: " << other.title << std::endl;
-    // Your code here...
 
-    if(other.waveform_size>0)
-    {
-        this->waveform_size=other.waveform_size;
-        this->waveform_data=new double[this->waveform_size];
-        for(size_t i=0;i<waveform_size;i++)
-        {
-            this->waveform_data[i]=other.waveform_data[i];
-        }
-        //so we need to copy all variable and go through the array, create a new one and copy each variable from that array
-    }
-    else 
-    {
-        this->waveform_size=0;
-        this->waveform_data=nullptr;
-    }
     
+    if (waveform_data) {
+        for (size_t i = 0; i < waveform_size; ++i) {
+            waveform_data[i] = other.waveform_data[i];
+        }
+    }
 }
 AudioTrack& AudioTrack::operator=(const AudioTrack& other) {
     // TODO: Implement the copy assignment operator
@@ -94,19 +93,17 @@ AudioTrack& AudioTrack::operator=(const AudioTrack& other) {
     return *this;
 }
 
-AudioTrack::AudioTrack(AudioTrack&& other) noexcept : 
-duration_seconds(other.duration_seconds),bpm(other.bpm),artists(other.artists),
-waveform_size(other.waveform_size),waveform_data(other.waveform_data) {
-    // TODO: Implement the move constructor
-    std::cout << "AudioTrack move constructor called for: " << other.title << std::endl;
-    
-    // Your code here...
-    title=std::move(other.title);
-    other.waveform_data=nullptr;
-    other.duration_seconds=0;
-    other.bpm=0;
-    other.waveform_size=0;
-    
+AudioTrack::AudioTrack(AudioTrack&& other) noexcept
+    : title(std::move(other.title)),
+      artists(std::move(other.artists)),
+      duration_seconds(other.duration_seconds),
+      bpm(other.bpm),
+      waveform_size(other.waveform_size),
+      waveform_data(other.waveform_data)
+{
+    // leave 'other' in a safe, empty state
+    other.waveform_size = 0;
+    other.waveform_data = nullptr;
 }
 
 AudioTrack& AudioTrack::operator=(AudioTrack&& other) noexcept {
@@ -142,6 +139,7 @@ void AudioTrack::get_waveform_copy(double* buffer, size_t buffer_size) const {
 
 void AudioTrack::set_bpm(int bpm)
 {
-    if (bpm < 0); //TODO THROW EXEPTION
+    if (bpm < 0)
+        throw std::invalid_argument("BPM cannot be negative");
     this->bpm = bpm;
 }
