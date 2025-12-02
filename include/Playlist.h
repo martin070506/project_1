@@ -86,6 +86,12 @@ public:
      */
     std::vector<AudioTrack*> getTracks() const;
 
+    /*
+        just to fix warnings
+    */
+    Playlist(const Playlist&) = default;
+    Playlist& operator=(const Playlist&) = delete;
+
 };
 
 
