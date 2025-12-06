@@ -29,7 +29,7 @@ class DJSession {
 private:
     // Session identification
     std::string session_name;
-    
+     bool play_all = false;
     // Service-oriented architecture: delegate to services
     DJLibraryService library_service;
     DJControllerService controller_service;
@@ -39,7 +39,7 @@ private:
     ConfigurationManager config_manager;
     SessionConfig session_config;
     std::vector<std::string> track_titles;
-    bool play_all = false;
+   
     // Session statistics
     struct SessionStats {
         size_t tracks_processed = 0;

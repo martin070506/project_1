@@ -9,7 +9,15 @@
 
 
 DJSession::DJSession(const std::string& name, bool play_all)
-    : session_name(name), play_all(play_all) {
+    : session_name(name), 
+    play_all(play_all),
+    library_service(),
+    controller_service(),
+    mixing_service(),
+    config_manager(),
+    session_config(),
+    track_titles(),
+    stats(){
     std::cout << "DJ Session System initialized: " << session_name << std::endl;
 }
 
@@ -155,7 +163,7 @@ void DJSession::simulate_dj_performance() {
     std::vector<std::string> playlistNames;
     
     if (play_all) {
-        for(const auto pair :session_config.playlists)
+        for(const auto &pair :session_config.playlists)
             playlistNames.push_back(pair.first);
         
         std::sort(playlistNames.begin(),playlistNames.end());
@@ -218,8 +226,10 @@ bool DJSession::load_configuration() {
     const std::string config_path = "bin/dj_config.txt";
     
     std::cout << "Loading configuration from: " << config_path << std::endl;
-    
-    if (!SessionFileParser::parse_config_file(config_path, session_config)) {
+    /*here were sending the empty session_config object 
+    that is is in this class, and the method parses the file from the path to the object */
+    if (!SessionFileParser::parse_config_file(config_path, session_config))
+    {
         std::cerr << "[ERROR] Failed to parse configuration file: " << config_path << std::endl;
         return false;
     }
