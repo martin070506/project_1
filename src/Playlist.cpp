@@ -9,7 +9,7 @@ Playlist::Playlist(const std::string& name)
 // TODO: Fix memory leaks!
 // Students must fix this in Phase 1
 Playlist::~Playlist() {
-    std::cout << "Destroying playlist: " << playlist_name << std::endl;
+    // std::cout << "Destroying playlist: " << playlist_name << std::endl;
 
     
     while (head)
@@ -28,12 +28,19 @@ void Playlist::add_track(AudioTrack* track) {
         return;
     }
 
-    // Create new node - this allocates memory!
     PlaylistNode* new_node = new PlaylistNode(track);
+    new_node->next = nullptr;
 
-    // Add to front of list
-    new_node->next = head;
-    head = new_node;
+    if (!head) {
+        head = new_node;
+    } else {
+        PlaylistNode* curr = head;
+        while (curr->next != nullptr) {
+            curr = curr->next;
+        }
+        curr->next = new_node;
+    }
+
     track_count++;
 
     std::cout << "Added '" << track->get_title() << "' to playlist '" 
@@ -64,9 +71,10 @@ void Playlist::remove_track(const std::string& title) {
         current=nullptr;
 
         track_count--;
-        std::cout << "Removed '" << title << "' from playlist" << std::endl;
+        // std::cout << "Removed '" << title << "' from playlist" << std::endl;
 
-    } else {
+    } 
+    else {
         std::cout << "Track '" << title << "' not found in playlist" << std::endl;
     }
 }
@@ -139,3 +147,14 @@ std::vector<AudioTrack*> Playlist::getTracks() const {
     }
     return tracks;
 }
+
+// Playlist& Playlist::operator=(const Playlist&& p)
+// {
+//     if(this==&p)
+//         return *this;
+//     delete this;
+//     this->head=p.head;
+//     this->playlist_name=p.playlist_name;
+//     this->track_count=p.track_count;
+    
+// }

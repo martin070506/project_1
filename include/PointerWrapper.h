@@ -64,7 +64,7 @@ public:
      * What should happen to the source wrapper after the move?
      */
     PointerWrapper(PointerWrapper&& other) noexcept:ptr(other.ptr){
-        std::cout<<"Move constructor called for: " <<other.ptr<<std::endl;
+        //std::cout<<"Move constructor called for: " <<other.ptr<<std::endl;
         other.ptr=nullptr;
     }
     

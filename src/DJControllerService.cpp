@@ -54,7 +54,6 @@ void DJControllerService::displayCacheStatus() const {
  */
 AudioTrack* DJControllerService::getTrackFromCache(const std::string& track_title) {
    //DOES NOT TRANSFER OWNERSHIP
-   std::cout << "\nGET TRACK FROM CACHE WAS CALLED----- THIS DOES NOT TRANSFER OWNERSHIP\n";
    AudioTrack* AT_ptr = cache.get(track_title);
    return AT_ptr;
 }

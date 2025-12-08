@@ -29,7 +29,7 @@ DJSession::~DJSession() {
 
 // ========== CORE FUNCTIONALITY ==========
 bool DJSession::load_playlist(const std::string& playlist_name)  {
-    std::cout << "[System] Loading playlist: " << playlist_name << "\n";
+    std::cout << "[System] Loading playlist: " << playlist_name;
     
     // Find the playlist in the session config
     auto it = session_config.playlists.find(playlist_name);
@@ -79,7 +79,7 @@ int DJSession::load_track_to_controller(const std::string& track_name) {
     stats.errors++;
     return 0;
    }
-   std::cout << " [System] Loading track '"<<track_name<<"' to controller..." << std::endl;
+   std::cout << "[System] Loading track '"<<track_name<<"' to controller..." << std::endl;
    int res=controller_service.loadTrackToCache(*At);
    if(res==1)
         stats.cache_hits++;
@@ -153,10 +153,9 @@ void DJSession::simulate_dj_performance() {
     std::cout << "Starting DJ performance simulation..." << std::endl;
     std::cout << "BPM Tolerance: " << session_config.bpm_tolerance << " BPM" << std::endl;
     std::cout << "Auto Sync: " << (session_config.auto_sync ? "enabled" : "disabled") << std::endl;
-    std::cout << "Cache Capacity: " << session_config.controller_cache_size << " slots (LRU policy)" << std::endl;
+    std::cout << "Cache Capacity: " << session_config.controller_cache_size << " slots (LRU policy)\n" << std::endl;
     std::cout << "--- Processing Tracks ---" << std::endl;
 
-    std::cout << "TODO: Implement the DJ performance simulation workflow here." << std::endl;
 
 
     //B Playlist Selection Loop
@@ -172,10 +171,11 @@ void DJSession::simulate_dj_performance() {
             if(!load_playlist(singlePlaylist_Name)) std::cout << "[ERROR] When Loading Playlist "<<singlePlaylist_Name << "When Play_all Is Active (Simulate DJ Performance)"<<std::endl;
             for(std::string track_title:track_titles)
             {
-                std::cout<<"\n–- Processing: "<<track_title<<" –-"<<std::endl;
-                stats.tracks_processed++;
+                std::cout<<"\n--- Processing: "<<track_title<<" ---"<<std::endl;
                 load_track_to_controller(track_title); //already updates cache statistics
+                controller_service.displayCacheStatus();
                 load_track_to_mixer_deck(track_title); //already updates cache statistics
+                mixing_service.displayDeckStatus();
                 stats.tracks_processed++;
             }
             print_session_summary();
@@ -189,7 +189,6 @@ void DJSession::simulate_dj_performance() {
         while (playlistName != "") 
         {
             std::cout<< playlistName << std::endl;
-            std::cout<<"SOMETHING GOOD WAS ENTERED SUPPOSED TO CONTINUE ------------------------------------------------------------------------------------------------------"<<std::endl;
             playlistNames.push_back(playlistName);
 
             if (!load_playlist(playlistName)) { 
@@ -198,11 +197,13 @@ void DJSession::simulate_dj_performance() {
             }
 
             for (std::string track_title : track_titles) {
-                std::cout<< "–- Processing: " << track_title << " –-" << std::endl;
+                std::cout<< "–-- Processing: " << track_title << " ---" << std::endl;
                 stats.tracks_processed++;
 
                 load_track_to_controller(track_title);
+                controller_service.displayCacheStatus();
                 load_track_to_mixer_deck(track_title);
+                mixing_service.displayDeckStatus();
             }
 
             print_session_summary();
@@ -213,7 +214,7 @@ void DJSession::simulate_dj_performance() {
         
     }
     
-    std::cerr << "\n[INFO] Session cancelled by user or all playlists played." << std::endl;
+    std::cerr << "\nSession cancelled by user or all playlists played." << std::endl;
 }
 
 
@@ -279,7 +280,6 @@ std::string DJSession::display_playlist_menu_from_config() {
         std::stringstream ss(input);
         if (ss >> selection && ss.eof()) {
             if (selection == 0) {
-                std::cout<<"0 WAS ENTERED SUPPOSED TO STOP"<<std::endl;
                 return "";
             } else if (selection >= 1 && selection <= static_cast<int>(playlist_names.size())) {
                 std::string selected_name = playlist_names[selection - 1];

@@ -90,7 +90,7 @@ public:
         just to fix warnings
     */
     Playlist(const Playlist&) = default;
-    Playlist& operator=(const Playlist&) = delete;
+    Playlist& operator=(const Playlist&)=default;
 
 };
 

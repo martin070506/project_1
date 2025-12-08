@@ -27,18 +27,18 @@ AudioTrack::AudioTrack(const std::string& title,
         waveform_data[i] = dis(gen);
     }
 
-    std::cout << "AudioTrack created: " << title << " by " << std::endl;
-    for (const auto& artist : artists) {
-        std::cout << artist << " ";
-    }
-    std::cout << std::endl;
+    //std::cout << "AudioTrack created: " << title << " by " << std::endl;
+    //for (const auto& artist : artists) {
+    //    std::cout << artist << " ";
+    //}
+    //std::cout << std::endl;
 }
 
 // ========== TODO: STUDENTS IMPLEMENT RULE OF 5 ==========
 
 AudioTrack::~AudioTrack() {
     // TODO: Implement the destructor
-    std::cout << "AudioTrack destructor called for: " << title << std::endl;
+    //std::cout << "AudioTrack destructor called for: " << title << std::endl;
     delete[] waveform_data;
     waveform_data=nullptr;
 }
@@ -53,7 +53,7 @@ AudioTrack::AudioTrack(const AudioTrack& other)
                     ? new double[other.waveform_size]
                     : nullptr)
 {
-    std::cout << "AudioTrack copy constructor called for: " << other.title << std::endl;
+    //std::cout << "AudioTrack copy constructor called for: " << other.title << std::endl;
 
     
     if (waveform_data) {
@@ -64,7 +64,7 @@ AudioTrack::AudioTrack(const AudioTrack& other)
 }
 AudioTrack& AudioTrack::operator=(const AudioTrack& other) {
     // TODO: Implement the copy assignment operator
-    std::cout << "AudioTrack copy assignment called for: " << other.title << std::endl;
+    //std::cout << "AudioTrack copy assignment called for: " << other.title << std::endl;
     // Your code here...
 
     //SELF CHECK--- SO WE DONT DELETE OURSELVES THAN COPY FROM IT
@@ -108,7 +108,7 @@ AudioTrack::AudioTrack(AudioTrack&& other) noexcept
 
 AudioTrack& AudioTrack::operator=(AudioTrack&& other) noexcept {
     // TODO: Implement the move assignment operator
-    std::cout << "AudioTrack move assignment called for: " << other.title << std::endl;
+    //std::cout << "AudioTrack move assignment called for: " << other.title << std::endl;
     // Your code here...
 
     if (this != &other) {

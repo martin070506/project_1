@@ -45,7 +45,7 @@ public:
      * The library retains ownership of the track.
      */
     AudioTrack* findTrack(const std::string& track_title);
-
+    void createNewPlaylist(const std::string& name );
     /**
      * @brief Get a vector of all track titles in the current playlist.
      * @return A vector of strings containing the track titles.
