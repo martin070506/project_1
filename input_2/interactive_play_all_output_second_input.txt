@@ -1,4 +1,3 @@
-
 ============= RUNNING INTERACTIVE SOFTWARE =============
 Created playlist: 
 [MixingEngineService] Initialized with 2 empty decks.

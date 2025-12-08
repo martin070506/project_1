@@ -69,10 +69,9 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     trackWrapper.get()->analyze_beatgrid();
 
     //BPM MANAGEMENT
-    if(decks[active_deck] && auto_sync)
-    {
+    if(auto_sync)
         sync_bpm(trackWrapper);
-    }
+    
     decks[target_Deck]=trackWrapper.release();
     std::cout <<"[Load Complete] '"<<track.get_title() <<"' is now loaded on deck "<<target_Deck <<std::endl;
 
@@ -108,10 +107,6 @@ void MixingEngineService::displayDeckStatus() const {
  * @return: true if BPM difference <= tolerance, false otherwise
  */
 bool MixingEngineService::can_mix_tracks(const PointerWrapper<AudioTrack>& track) const {
-       if (!decks[active_deck] || !track || !track.get()) {
-        std::cout << "\n[ERROR] nullptr failed to mix" << std::endl;
-        return false;
-   }
 
     int bpm_Difference = decks[active_deck]->get_bpm() - track.get()->get_bpm();
     if (bpm_Difference < 0) 
@@ -125,14 +120,17 @@ bool MixingEngineService::can_mix_tracks(const PointerWrapper<AudioTrack>& track
  * @param track: Track to synchronize with active deck
  */
 void MixingEngineService::sync_bpm(const PointerWrapper<AudioTrack>& track) const {
-   if (!can_mix_tracks(track)) {
+   if (!decks[active_deck]) {
         std::cout << "[Sync BPM] Cannot sync - one of the decks is empty." << std::endl;
         return;
    }
+
+   if (can_mix_tracks(track))
+        return;
    
     int originalBPM = track.get()->get_bpm();
     int averageBPM = (originalBPM + decks[active_deck]->get_bpm()) / 2;
     track.get()->set_bpm(averageBPM);
 
-    std::cout << "\n[Sync BPM] Syncing BPM from " << originalBPM << " to " << averageBPM << std::endl;
+    std::cout << "[Sync BPM] Syncing BPM from " << originalBPM << " to " << averageBPM << std::endl;
 }
