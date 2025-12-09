@@ -28,18 +28,12 @@ void Playlist::add_track(AudioTrack* track) {
         return;
     }
 
+    // Create new node
     PlaylistNode* new_node = new PlaylistNode(track);
-    new_node->next = nullptr;
 
-    if (!head) {
-        head = new_node;
-    } else {
-        PlaylistNode* curr = head;
-        while (curr->next != nullptr) {
-            curr = curr->next;
-        }
-        curr->next = new_node;
-    }
+    // Insert at front
+    new_node->next = head;   // new node points to the old head
+    head = new_node;         // new node becomes the head
 
     track_count++;
 

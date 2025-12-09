@@ -128,6 +128,7 @@ std::vector<std::string> DJLibraryService::getTrackTitles() const {
     {
         Titles.push_back(t->get_title());
     }
+    std::reverse (Titles.begin(),Titles.end());
     return Titles;
 }
 //IMPLEMEBTED DESTRUCTOR AS ASKED THAT WILL DELETE ALL TRACKS IN LIBRARY
